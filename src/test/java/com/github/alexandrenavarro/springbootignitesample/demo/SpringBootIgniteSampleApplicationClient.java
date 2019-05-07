@@ -32,13 +32,6 @@ public class SpringBootIgniteSampleApplicationClient implements CommandLineRunne
 				"PriceCache");
 		log.info("priceRepository.get(1():{}", cache.get(1L));
 
-		CacheEntryListenerConfiguration listenerConfigurationWithFilter =
-				new MutableCacheEntryListenerConfiguration(FactoryBuilder.factoryOf(MyCacheEntryListener.class),
-						FactoryBuilder.factoryOf(MyCacheEntryListener.class),
-						false,
-						true);
-		cache.registerCacheEntryListener(listenerConfigurationWithFilter);
-
 		while (true) {
 			Thread.sleep(10000);
 			log.info("priceRepository.get(1():{}", cache.get(1L));
@@ -46,27 +39,6 @@ public class SpringBootIgniteSampleApplicationClient implements CommandLineRunne
 	}
 
 
-	static public class MyCacheEntryListener implements CacheEntryCreatedListener<Long, Price>,
-			CacheEntryUpdatedListener<Long, Price>, CacheEntryEventFilter {
-
-		public void onCreated(Iterable<CacheEntryEvent<? extends Long, ? extends Price>> cacheEntryEvents) throws CacheEntryListenerException {
-			for (CacheEntryEvent entryEvent : cacheEntryEvents) {
-				log.info("Created : " + entryEvent.getKey() + " with value : " + entryEvent.getValue());
-			}
-		}
-
-		public void onUpdated(Iterable<CacheEntryEvent<? extends Long, ? extends Price>> cacheEntryEvents) throws CacheEntryListenerException {
-			for (CacheEntryEvent entryEvent : cacheEntryEvents) {
-				log.info("Updated : " + entryEvent.getKey() + " with value : " + entryEvent.getValue());
-			}
-		}
-
-		@Override
-		public boolean evaluate(CacheEntryEvent cacheEntryEvent) throws CacheEntryListenerException {
-			log.info("cacehEntryEvent:{}", cacheEntryEvent);
-			return true;
-		}
-	}
 
 
 }
